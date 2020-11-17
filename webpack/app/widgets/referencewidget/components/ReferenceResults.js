@@ -35,7 +35,7 @@ class ReferenceResults extends React.Component {
     return (
       <div className="position-absolute shadow p-1 border rounded bg-white mt-1"
            style={this.get_style()}>
-        <table className="referenceresults table table-borderless">
+        <table className="referenceresultstable table table-borderless">
           {this.buildRows()}
         </table>
       </div>

@@ -37,17 +37,24 @@ class ReferenceField extends React.Component {
 
   render() {
     return (
-      <input
-        type="text"
-        className={this.props.className}
-        ref={this.input_field_ref}
-        id={this.props.id}
-        name={this.props.name}
-        disabled={this.props.disabled}
-        onChange={this.on_change}
-        onKeyPress={this.on_keypress}
-        placeholder={this.props.placeholder}
-      />
+      <div className="referencefield input-group">
+        <input
+          type="text"
+          className={this.props.className}
+          ref={this.input_field_ref}
+          id={this.props.id}
+          name={this.props.name}
+          disabled={this.props.disabled}
+          onChange={this.on_change}
+          onKeyPress={this.on_keypress}
+          placeholder={this.props.placeholder}
+        />
+        <div className="input-group-append">
+          <div className="input-group-text">
+            <i className="fas fa-search"></i>
+          </div>
+        </div>
+      </div>
     );
   }
 }

@@ -40,7 +40,7 @@ class ReferenceWidgetController extends React.Component {
 
   render() {
     return (
-        <div className="referencewidget-container">
+        <div className="referencewidget">
           <ReferenceField
             className="form-control"
             id={this.state.id}
