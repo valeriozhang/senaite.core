@@ -2,6 +2,7 @@ import $ from "jquery";
 import {i18n, _t, _p} from "./i18n-wrapper.js"
 import Site from "./components/site.js"
 import Sidebar from "./components/sidebar.js"
+import ReferenceWidgetController from "./widgets/referencewidget/widget.js"
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -49,5 +50,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }, logoff_ms);
   }
   // /Auto LogOff
+
+
+  // Widgets
+  window.widgets = {};
+  // Referencewidgets
+  var ref_widgets = document.getElementsByClassName("senaite-reference-widget");
+  for (let widget of ref_widgets) {
+    let id = widget.dataset.id;
+    let controller = ReactDOM.render(<ReferenceWidgetController root_el={widget} />, widget);
+    window.widgets[id] = controller;
+  }
 
 });
