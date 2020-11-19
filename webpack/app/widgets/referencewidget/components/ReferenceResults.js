@@ -5,6 +5,9 @@ class ReferenceResults extends React.Component {
 
   constructor(props) {
     super(props);
+
+    // bind event handlers
+    this.on_select = this.on_select.bind(this);
   }
 
   get_columns() {
@@ -27,6 +30,18 @@ class ReferenceResults extends React.Component {
 
   has_results() {
     return this.get_results().length > 0;
+  }
+
+  get_result_uid(result) {
+    return result.UID || "NO UID FOUND!";
+  }
+
+  is_uid_selected(uid) {
+    return this.props.selected.indexOf(uid) > -1;
+  }
+
+  get_result_label(result) {
+    return result.label || result.Title || "NO LABEL";
   }
 
   buildHeaderColumns() {
@@ -53,8 +68,16 @@ class ReferenceResults extends React.Component {
     let rows = [];
     let results = this.get_results();
     for (let result of results) {
+      let uid = this.get_result_uid(result);
+      // skip selected UIDs
+      if (this.is_uid_selected(uid)) {
+        continue;
+      }
+      let label = this.get_result_label(result);
       rows.push(
-        <tr>
+        <tr uid={uid}
+            label={label}
+            onClick={this.on_select}>
           {this.buildColumns(result)}
         </tr>
       );
@@ -68,14 +91,25 @@ class ReferenceResults extends React.Component {
     }
   }
 
+  on_select(event) {
+    event.preventDefault();
+    let target = event.currentTarget;
+    let uid = target.getAttribute("uid")
+    let label = target.getAttribute("label")
+    console.debug("ReferenceResults::on_select:event=", event);
+    if (this.props.on_select) {
+      this.props.on_select(uid);
+    }
+  }
+
   render() {
     if (!this.has_results()) {
       return null;
     }
     return (
-      <div className="position-absolute shadow border rounded bg-white mt-1"
+      <div className={this.props.className}
            style={this.get_style()}>
-        <table className="referenceresultstable table table-sm table-hover">
+        <table className="table table-sm table-hover">
           <thead>
             <tr>
               {this.buildHeaderColumns()}

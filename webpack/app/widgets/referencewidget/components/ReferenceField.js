@@ -11,6 +11,7 @@ class ReferenceField extends React.Component {
     // https://reactjs.org/docs/react-api.html#reactcreateref
     this.input_field_ref = React.createRef();
 
+    // bind event handlers
     this.on_change = this.on_change.bind(this);
     this.on_keypress = this.on_keypress.bind(this);
     this.on_focus = this.on_focus.bind(this);
@@ -19,6 +20,22 @@ class ReferenceField extends React.Component {
 
   get_search_value() {
     return this.input_field_ref.current.value
+  }
+
+  get_selected() {
+    return this.props.selected || [];
+  }
+
+  buildSelectedItems() {
+    let items = [];
+    let selected = this.get_selected();
+
+    for (let uid of selected) {
+      items.push(
+        <span className="badge badge-pill badge-primary">{uid}</span>
+      );
+    }
+    return items
   }
 
   on_change(event) {
@@ -53,23 +70,28 @@ class ReferenceField extends React.Component {
 
   render() {
     return (
-      <div className="referencefield2 input-group">
-        <input
-          type="text"
-          className={this.props.className}
-          ref={this.input_field_ref}
-          id={this.props.id}
-          name={this.props.name}
-          disabled={this.props.disabled}
-          onChange={this.on_change}
-          onBlur={this.on_blur}
-          onKeyPress={this.on_keypress}
-          onFocus={this.on_focus}
-          placeholder={this.props.placeholder}
-        />
-        <div className="input-group-append">
-          <div className="input-group-text">
-            <i className="fas fa-search"></i>
+      <div className="referencefield2">
+        <div className="selected-items">
+          {this.buildSelectedItems()}
+        </div>
+        <div className="input-group">
+          <input
+            type="text"
+            className={this.props.className}
+            ref={this.input_field_ref}
+            id={this.props.id}
+            name={this.props.name}
+            disabled={this.props.disabled}
+            onChange={this.on_change}
+            onBlur={this.on_blur}
+            onKeyPress={this.on_keypress}
+            onFocus={this.on_focus}
+            placeholder={this.props.placeholder}
+          />
+          <div className="input-group-append">
+            <div className="input-group-text">
+              <i className="fas fa-search"></i>
+            </div>
           </div>
         </div>
       </div>
