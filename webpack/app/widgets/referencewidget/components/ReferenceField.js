@@ -3,6 +3,9 @@ import ReactDOM from "react-dom";
 
 
 class ReferenceField extends React.Component {
+  /*
+   * Renders the input field and the selected items list
+   */
 
   constructor(props) {
     super(props);
@@ -19,20 +22,40 @@ class ReferenceField extends React.Component {
   }
 
   get_search_value() {
+    /*
+     * Returns the search value from the input field
+     */
     return this.input_field_ref.current.value
   }
 
-  get_selected() {
+  get_selected_uids() {
+    /*
+     * Returns a list of selected UIDs
+     */
     return this.props.selected || [];
   }
 
+  get_record_by_uid(uid) {
+    /*
+     * Returns the record by UID
+     */
+    return this.props.records[uid] || {};
+  }
+
   buildSelectedItems() {
+    /*
+     * Build selected items list
+     */
     let items = [];
-    let selected = this.get_selected();
+    let selected = this.get_selected_uids();
 
     for (let uid of selected) {
       items.push(
-        <span className="badge badge-pill badge-primary">{uid}</span>
+        <div uid={uid} className="selected-item">
+          <span className="badge badge-pill badge-primary">
+            <i className="fas fa-trash"></i> {uid}
+          </span>
+        </div>
       );
     }
     return items
@@ -93,6 +116,10 @@ class ReferenceField extends React.Component {
               <i className="fas fa-search"></i>
             </div>
           </div>
+          <input type="hidden"
+                 name={this.props.name + "_uid"}
+                 value={this.props.selected.join(",")}
+          />
         </div>
       </div>
     );

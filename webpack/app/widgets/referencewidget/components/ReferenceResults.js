@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 class ReferenceResults extends React.Component {
+  /*
+   * Renders the search results table
+   */
 
   constructor(props) {
     super(props);
@@ -11,25 +14,46 @@ class ReferenceResults extends React.Component {
   }
 
   get_columns() {
+    /*
+     * Header columns
+     */
     return this.props.columns || [];
   }
 
   get_column_names() {
+    /*
+     * Header column names
+     */
     let columns = this.get_columns();
     return columns.map((column) => { return column.columnName });
   }
 
   get_column_labels() {
+    /*
+     * Header column labels
+     */
     let columns = this.get_columns();
     return columns.map((column) => { return column.label });
   }
 
   get_results() {
+    /*
+     * List of results records
+     */
     return this.props.results || [];
   }
 
   has_results() {
+    /*
+     * Checks if we have results records
+     */
     return this.get_results().length > 0;
+  }
+
+  get_style() {
+    return {
+      width: this.props.width || "400px"
+    }
   }
 
   get_result_uid(result) {
@@ -40,11 +64,10 @@ class ReferenceResults extends React.Component {
     return this.props.selected.indexOf(uid) > -1;
   }
 
-  get_result_label(result) {
-    return result.label || result.Title || "NO LABEL";
-  }
-
   buildHeaderColumns() {
+    /*
+     * Build Header <th></th> columns
+     */
     let columns = []
     for (let label of this.get_column_labels()) {
       columns.push(
@@ -55,6 +78,9 @@ class ReferenceResults extends React.Component {
   }
 
   buildColumns(result) {
+    /*
+     * Build Table <td></td> columns
+     */
     let columns = []
     for (let name of this.get_column_names()) {
       columns.push(
@@ -65,6 +91,9 @@ class ReferenceResults extends React.Component {
   }
 
   buildRows() {
+    /*
+     * Build Table <tr></tr> rows
+     */
     let rows = [];
     let results = this.get_results();
     for (let result of results) {
@@ -73,10 +102,8 @@ class ReferenceResults extends React.Component {
       if (this.is_uid_selected(uid)) {
         continue;
       }
-      let label = this.get_result_label(result);
       rows.push(
         <tr uid={uid}
-            label={label}
             onClick={this.on_select}>
           {this.buildColumns(result)}
         </tr>
@@ -85,17 +112,10 @@ class ReferenceResults extends React.Component {
     return rows
   }
 
-  get_style() {
-    return {
-      width: this.props.width || "400px"
-    }
-  }
-
   on_select(event) {
     event.preventDefault();
     let target = event.currentTarget;
     let uid = target.getAttribute("uid")
-    let label = target.getAttribute("label")
     console.debug("ReferenceResults::on_select:event=", event);
     if (this.props.on_select) {
       this.props.on_select(uid);

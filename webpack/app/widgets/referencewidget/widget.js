@@ -31,6 +31,8 @@ class ReferenceWidgetController extends React.Component {
       columns: this.parse_json(columns),
       // the selected UIDs of the field
       selected: [],
+      // records
+      records: {},
       // the search query results
       results: [],
       // loading state
@@ -184,6 +186,7 @@ class ReferenceWidgetController extends React.Component {
         <div className="referencewidget">
           <ReferenceField
             className="form-control"
+            name={this.state.name}
             disabled={this.state.disabled}
             selected={this.state.selected}
             multi={this.state.multi}

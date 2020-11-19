@@ -3,13 +3,16 @@
 import inspect
 import json
 
+from six import string_types
+
 from bika.lims import api
 from Products.Five.browser import BrowserView
+from senaite.core import logger
 from senaite.core.decorators.ajax import returns_safe_json
 from senaite.core.decorators.ajax import set_application_json_header
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
-from senaite.core import logger
+from ZPublisher.HTTPRequest import record
 
 
 @implementer(IPublishTraverse)
@@ -76,6 +79,15 @@ class ReferenceWidgetView(BrowserView):
         data = self.request.get("BODY", "{}")
         return json.loads(data)
 
+    def to_json(self, value):
+        """Convert value to JSON
+        """
+        if isinstance(value, string_types):
+            return value
+        elif isinstance(value, record):
+            value = dict(value)
+        return json.dumps(value)
+
     def get_field_attributes(self, field):
         """Get field attributes
         """
@@ -90,6 +102,7 @@ class ReferenceWidgetView(BrowserView):
         style = getattr(widget, "style", {"width": "550px"})
 
         field_name = "{}".format(field.__name__)
+        field_value = field.get(self.context)
         field_id = "{}_{}".format(api.get_id(self.context), field_name)
         url = api.get_url(self.context)
         api_url = "{}/{}".format(url, self.__name__)
@@ -97,12 +110,13 @@ class ReferenceWidgetView(BrowserView):
         return {
             "data-id": field_id,
             "data-name": field_name,
+            "data-value": self.to_json(field_value),
             "data-api_url": api_url,
             "data-catalog_name": catalog_name,
-            "data-base_query": json.dumps(base_query),
-            "data-search_query": json.dumps(search_query),
-            "data-columns": json.dumps(columns),
-            "data-style": json.dumps(style),
+            "data-base_query": self.to_json(base_query),
+            "data-search_query": self.to_json(search_query),
+            "data-columns": self.to_json(columns),
+            "data-style": self.to_json(style),
         }
 
     def get_brain_info(self, brain):
