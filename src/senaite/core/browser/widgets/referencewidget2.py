@@ -100,6 +100,7 @@ class ReferenceWidgetView(BrowserView):
         search_query = getattr(widget, "search_query", {})
         columns = getattr(widget, "colModel", {})
         style = getattr(widget, "style", {"width": "550px"})
+        multi_valued = getattr(field, "multiValued", False) in ["1", True]
 
         field_name = "{}".format(field.__name__)
         field_value = field.get(self.context)
@@ -111,6 +112,7 @@ class ReferenceWidgetView(BrowserView):
             "data-id": field_id,
             "data-name": field_name,
             "data-value": self.to_json(field_value),
+            "data-multi_valued": self.to_json(multi_valued),
             "data-api_url": api_url,
             "data-catalog_name": catalog_name,
             "data-base_query": self.to_json(base_query),

@@ -14,6 +14,7 @@ class ReferenceWidgetController extends React.Component {
     let id = el.dataset.id;
     let name = el.dataset.name;
     let value = el.dataset.value || "";
+    let multi_valued = el.dataset.multi_valued;
     let selected = value.split(",") || [];
     let api_url = el.dataset.api_url;
     let catalog_name = el.dataset.catalog_name;
@@ -43,7 +44,7 @@ class ReferenceWidgetController extends React.Component {
       // loading state
       loading: false,
       // multi valued
-      multi: true,
+      multi_valued: this.parse_json(multi_valued),
       // limit results
       limit: limit
     }
@@ -209,7 +210,7 @@ class ReferenceWidgetController extends React.Component {
             name={this.state.name}
             disabled={this.state.disabled}
             selected={this.state.selected}
-            multi={this.state.multi}
+            multi_valued={this.state.multi_valued}
             on_search={this.search}
             on_focus={this.search}
             on_deselect={this.deselect}

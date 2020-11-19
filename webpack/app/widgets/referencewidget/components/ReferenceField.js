@@ -40,7 +40,7 @@ class ReferenceField extends React.Component {
     /*
      * Returns true when the field accepts multiple references
      */
-    return this.props.multi || false;
+    return this.props.multi_valued || false;
   }
 
   show_input_field() {
@@ -48,9 +48,9 @@ class ReferenceField extends React.Component {
      * Show/hide input field
      */
     let selected = this.get_selected_uids();
-    let multi = this.is_multi_valued();
+    let multi_valued = this.is_multi_valued();
 
-    if (selected.length > 0 && !multi) {
+    if (selected.length > 0 && !multi_valued) {
       return false;
     }
     return true;

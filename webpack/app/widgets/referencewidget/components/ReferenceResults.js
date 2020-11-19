@@ -25,7 +25,9 @@ class ReferenceResults extends React.Component {
      * Header column names
      */
     let columns = this.get_columns();
-    return columns.map((column) => { return column.columnName });
+    return columns.map((column) => {
+      return column.columnName;
+    });
   }
 
   get_column_labels() {
@@ -52,7 +54,9 @@ class ReferenceResults extends React.Component {
 
   get_style() {
     return {
-      width: this.props.width || "400px"
+      minWidth: this.props.width || "400px",
+      backgroundColor: "white",
+      zIndex: 999999
     }
   }
 
