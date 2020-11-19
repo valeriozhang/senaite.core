@@ -53,6 +53,7 @@ class ReferenceWidgetController extends React.Component {
     this.search_all = this.search_all.bind(this);
     this.clear_results = this.clear_results.bind(this);
     this.select = this.select.bind(this);
+    this.deselect = this.deselect.bind(this);
     this.on_esc = this.on_esc.bind(this);
 
     return this
@@ -89,24 +90,26 @@ class ReferenceWidgetController extends React.Component {
     return options
   }
 
-  select(uid, toggle) {
+  select(uid) {
     console.debug("ReferenceWidgetController::select:uid:", uid);
-    if (toggle == null) {
-      toggle = true;
-    }
     // create a copy of the selected UIDs
     let selected = [].concat(this.state.selected);
-    if (toggle) {
-      if (selected.indexOf(uid) == -1) {
-        selected.push(uid);
-      }
-    } else {
-      let pos = selected.indexOf(uid);
-      if (pos > -1) {
-        selected.splice(pos, 1);
-      }
+    if (selected.indexOf(uid) == -1) {
+      selected.push(uid);
     }
     this.setState({selected: selected});
+    this.clear_results();
+  }
+
+  deselect(uid) {
+    console.debug("ReferenceWidgetController::deselect:uid:", uid);
+    let selected = [].concat(this.state.selected);
+    let pos = selected.indexOf(uid);
+    if (pos > -1) {
+      selected.splice(pos, 1);
+    }
+    this.setState({selected: selected});
+    this.clear_results();
   }
 
   search(value) {
@@ -192,6 +195,7 @@ class ReferenceWidgetController extends React.Component {
             multi={this.state.multi}
             on_search={this.search}
             on_focus={this.search_all}
+            on_deselect={this.deselect}
           />
           <ReferenceResults
             className="position-absolute shadow border rounded bg-white mt-1"

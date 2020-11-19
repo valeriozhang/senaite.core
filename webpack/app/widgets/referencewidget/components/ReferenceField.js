@@ -19,6 +19,7 @@ class ReferenceField extends React.Component {
     this.on_keypress = this.on_keypress.bind(this);
     this.on_focus = this.on_focus.bind(this);
     this.on_blur = this.on_blur.bind(this);
+    this.on_deselect = this.on_deselect.bind(this);
   }
 
   get_search_value() {
@@ -33,6 +34,26 @@ class ReferenceField extends React.Component {
      * Returns a list of selected UIDs
      */
     return this.props.selected || [];
+  }
+
+  is_multi_valued() {
+    /*
+     * Returns true when the field accepts multiple references
+     */
+    return this.props.multi || false;
+  }
+
+  show_input_field() {
+    /*
+     * Show/hide input field
+     */
+    let selected = this.get_selected_uids();
+    let multi = this.is_multi_valued();
+
+    if (selected.length > 0 && !multi) {
+      return false;
+    }
+    return true;
   }
 
   get_record_by_uid(uid) {
@@ -53,12 +74,23 @@ class ReferenceField extends React.Component {
       items.push(
         <div uid={uid} className="selected-item">
           <span className="badge badge-pill badge-primary">
-            <i className="fas fa-trash"></i> {uid}
+            <i uid={uid}
+               onClick={this.on_deselect}
+               className="fas fa-trash"></i> {uid}
           </span>
         </div>
       );
     }
     return items
+  }
+
+  on_deselect(event) {
+    event.preventDefault();
+    let target = event.currentTarget;
+    let uid = target.getAttribute("uid");
+    if (this.props.on_deselect) {
+      this.props.on_deselect(uid);
+    }
   }
 
   on_change(event) {
@@ -97,30 +129,32 @@ class ReferenceField extends React.Component {
         <div className="selected-items">
           {this.buildSelectedItems()}
         </div>
-        <div className="input-group">
-          <input
-            type="text"
-            className={this.props.className}
-            ref={this.input_field_ref}
-            id={this.props.id}
-            name={this.props.name}
-            disabled={this.props.disabled}
-            onChange={this.on_change}
-            onBlur={this.on_blur}
-            onKeyPress={this.on_keypress}
-            onFocus={this.on_focus}
-            placeholder={this.props.placeholder}
-          />
-          <div className="input-group-append">
-            <div className="input-group-text">
-              <i className="fas fa-search"></i>
+        {this.show_input_field() &&
+          <div className="input-group">
+            <input
+              type="text"
+              className={this.props.className}
+              ref={this.input_field_ref}
+              id={this.props.id}
+              name={this.props.name}
+              disabled={this.props.disabled}
+              onChange={this.on_change}
+              onBlur={this.on_blur}
+              onKeyPress={this.on_keypress}
+              onFocus={this.on_focus}
+              placeholder={this.props.placeholder}
+            />
+            <div className="input-group-append">
+              <div className="input-group-text">
+                <i className="fas fa-search"></i>
+              </div>
             </div>
           </div>
-          <input type="hidden"
-                 name={this.props.name + "_uid"}
-                 value={this.props.selected.join(",")}
+        }
+        <input type="hidden"
+          name={this.props.name + "_uid"}
+          value={this.props.selected.join(",")}
           />
-        </div>
       </div>
     );
   }
