@@ -112,7 +112,8 @@ class ReferenceField extends React.Component {
   on_focus(event) {
     console.debug("ReferenceField::on_focus");
     if (this.props.on_focus) {
-      this.props.on_focus();
+      let value = this.get_search_value();
+      this.props.on_focus(value);
     }
   }
 

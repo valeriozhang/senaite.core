@@ -43,7 +43,7 @@ class ReferenceWidgetController extends React.Component {
       // loading state
       loading: false,
       // multi valued
-      multi: false,
+      multi: true,
       // limit results
       limit: limit
     }
@@ -60,16 +60,19 @@ class ReferenceWidgetController extends React.Component {
     this.select = this.select.bind(this);
     this.deselect = this.deselect.bind(this);
     this.on_esc = this.on_esc.bind(this);
+    this.on_click = this.on_click.bind(this);
 
     return this
   }
 
   componentDidMount(){
     document.addEventListener("keydown", this.on_esc, false);
+    document.addEventListener("click", this.on_click, false)
   }
 
   componentWillUnmount(){
     document.removeEventListener("keydown", this.on_esc, false);
+    document.removeEventListener("click", this.on_click, false);
   }
 
   parse_json(value) {
@@ -189,6 +192,15 @@ class ReferenceWidgetController extends React.Component {
     }
   }
 
+  on_click(event) {
+    // clear results when clicked outside of the widget
+    let widget = this.props.root_el;
+    let target = event.target;
+    if (!widget.contains(target)) {
+      this.clear_results();
+    }
+  }
+
   render() {
     return (
         <div className="referencewidget">
@@ -199,7 +211,7 @@ class ReferenceWidgetController extends React.Component {
             selected={this.state.selected}
             multi={this.state.multi}
             on_search={this.search}
-            on_focus={this.search_all}
+            on_focus={this.search}
             on_deselect={this.deselect}
           />
           <ReferenceResults
