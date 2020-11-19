@@ -37,7 +37,7 @@ class ReferenceField extends React.Component {
 
   render() {
     return (
-      <div className="referencefield input-group">
+      <div className="referencefield2 input-group">
         <input
           type="text"
           className={this.props.className}
