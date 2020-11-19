@@ -11,6 +11,10 @@ class ReferenceWidgetController extends React.Component {
     super(props);
 
     let el = props.root_el;
+    let id = el.dataset.id;
+    let name = el.dataset.name;
+    let value = el.dataset.value || "";
+    let selected = value.split(",") || [];
     let api_url = el.dataset.api_url;
     let catalog_name = el.dataset.catalog_name;
     let base_query = el.dataset.base_query;
@@ -20,8 +24,9 @@ class ReferenceWidgetController extends React.Component {
 
     // Internal state
     this.state = {
-      id: el.dataset.id,
-      name: el.dataset.name,
+      id: id,
+      name: name,
+      value: value,
       // disabled flag for the field
       disabled: false,
       // query state
@@ -30,7 +35,7 @@ class ReferenceWidgetController extends React.Component {
       search_query: this.parse_json(search_query),
       columns: this.parse_json(columns),
       // the selected UIDs of the field
-      selected: [],
+      selected: selected,
       // records
       records: {},
       // the search query results
