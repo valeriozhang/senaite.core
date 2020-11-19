@@ -16,6 +16,7 @@ class ReferenceWidgetController extends React.Component {
     let base_query = el.dataset.base_query;
     let search_query = el.dataset.search_query;
     let columns = el.dataset.columns;
+    let limit = el.dataset.limit || 10;
 
     // Internal state
     this.state = {
@@ -36,6 +37,8 @@ class ReferenceWidgetController extends React.Component {
       loading: false,
       // multi valued
       multi: false,
+      // limit results
+      limit: limit
     }
 
     // Prepare API
@@ -45,6 +48,8 @@ class ReferenceWidgetController extends React.Component {
 
     // bind methods
     this.search = this.search.bind(this);
+    this.search_all = this.search_all.bind(this);
+    this.clear_results = this.clear_results.bind(this);
 
     return this
   }
@@ -80,7 +85,7 @@ class ReferenceWidgetController extends React.Component {
     console.log("ReferenceWidgetController::search:value:", value);
 
     if (!value) {
-      this.setState({results: []})
+      this.search_all();
       return null;
     }
 
@@ -98,6 +103,30 @@ class ReferenceWidgetController extends React.Component {
       self.setState({results: data})
       self.toggle_loading(false);
     });
+  }
+
+  search_all() {
+    /*
+     * Search all results
+     */
+    // prepare the server request
+    let self = this;
+    this.toggle_loading(true);
+    this.state.search_query = {};
+    let options = this.getRequestOptions();
+    let promise = this.api.search(options);
+    promise.then(function(data) {
+      console.debug("GOT REFWIDGET FILTER RESULTS: ", data);
+      self.setState({results: data})
+      self.toggle_loading(false);
+    });
+  }
+
+  clear_results() {
+    /*
+     * Clear all search results
+     */
+    this.setState({results: []})
   }
 
   toggle_loading(toggle) {
@@ -122,11 +151,15 @@ class ReferenceWidgetController extends React.Component {
             selected={this.state.selected}
             multi={this.state.multi}
             on_search={this.search}
+            on_focus={this.search_all}
+            on_blur={this.clear_results}
           />
           <ReferenceResults
             columns={this.state.columns}
             selected={this.state.selected}
-            results={this.state.results}/>
+            results={this.state.results}
+            limit={this.state.limit}
+          />
         </div>
     );
   }

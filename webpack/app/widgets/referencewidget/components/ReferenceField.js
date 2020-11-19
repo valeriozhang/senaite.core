@@ -13,6 +13,8 @@ class ReferenceField extends React.Component {
 
     this.on_change = this.on_change.bind(this);
     this.on_keypress = this.on_keypress.bind(this);
+    this.on_focus = this.on_focus.bind(this);
+    this.on_blur = this.on_blur.bind(this);
   }
 
   get_search_value() {
@@ -22,7 +24,7 @@ class ReferenceField extends React.Component {
   on_change(event) {
     event.preventDefault();
     let value = this.get_search_value();
-    console.debug("on_change::value: ", value);
+    console.debug("ReferenceField::on_change:value: ", value);
     if (this.props.on_search) {
       this.props.on_search(value);
     }
@@ -32,6 +34,20 @@ class ReferenceField extends React.Component {
     if (event.which == 13) {
       // prevent form submission
       event.preventDefault();
+    }
+  }
+
+  on_focus(event) {
+    console.debug("ReferenceField::on_focus");
+    if (this.props.on_focus) {
+      this.props.on_focus();
+    }
+  }
+
+  on_blur(event) {
+    console.debug("ReferenceField::on_blur");
+    if (this.props.on_blur) {
+      this.props.on_blur();
     }
   }
 
@@ -46,7 +62,9 @@ class ReferenceField extends React.Component {
           name={this.props.name}
           disabled={this.props.disabled}
           onChange={this.on_change}
+          onBlur={this.on_blur}
           onKeyPress={this.on_keypress}
+          onFocus={this.on_focus}
           placeholder={this.props.placeholder}
         />
         <div className="input-group-append">
