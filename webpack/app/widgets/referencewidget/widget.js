@@ -38,7 +38,7 @@ class ReferenceWidgetController extends React.Component {
       columns: this.parse_json(columns),
       display_field: this.display_field,
       // the selected UIDs of the field
-      selected: [],
+      selected_uids: [],
       // records
       records: {},
       // the search query results
@@ -105,22 +105,22 @@ class ReferenceWidgetController extends React.Component {
   select(uid) {
     console.debug("ReferenceWidgetController::select:uid:", uid);
     // create a copy of the selected UIDs
-    let selected = [].concat(this.state.selected);
-    if (selected.indexOf(uid) == -1) {
-      selected.push(uid);
+    let selected_uids = [].concat(this.state.selected_uids);
+    if (selected_uids.indexOf(uid) == -1) {
+      selected_uids.push(uid);
     }
-    this.setState({selected: selected});
+    this.setState({selected_uids: selected_uids});
     this.clear_results();
   }
 
   deselect(uid) {
     console.debug("ReferenceWidgetController::deselect:uid:", uid);
-    let selected = [].concat(this.state.selected);
-    let pos = selected.indexOf(uid);
+    let selected_uids = [].concat(this.state.selected_uids);
+    let pos = selected_uids.indexOf(uid);
     if (pos > -1) {
-      selected.splice(pos, 1);
+      selected_uids.splice(pos, 1);
     }
-    this.setState({selected: selected});
+    this.setState({selected_uids: selected_uids});
     this.clear_results();
   }
 
@@ -215,7 +215,7 @@ class ReferenceWidgetController extends React.Component {
             className="form-control"
             name={this.state.name}
             disabled={this.state.disabled}
-            selected={this.state.selected}
+            selected_uids={this.state.selected_uids}
             multi_valued={this.state.multi_valued}
             on_search={this.search}
             on_focus={this.search}
@@ -224,7 +224,7 @@ class ReferenceWidgetController extends React.Component {
           <ReferenceResults
             className="position-absolute shadow border rounded bg-white mt-1"
             columns={this.state.columns}
-            selected={this.state.selected}
+            selected_uids={this.state.selected_uids}
             results={this.state.results}
             limit={this.state.limit}
             on_select={this.select}

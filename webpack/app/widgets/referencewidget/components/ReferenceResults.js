@@ -65,7 +65,7 @@ class ReferenceResults extends React.Component {
   }
 
   is_uid_selected(uid) {
-    return this.props.selected.indexOf(uid) > -1;
+    return this.props.selected_uids.indexOf(uid) > -1;
   }
 
   buildHeaderColumns() {

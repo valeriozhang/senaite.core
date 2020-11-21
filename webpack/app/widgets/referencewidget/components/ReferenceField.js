@@ -33,7 +33,7 @@ class ReferenceField extends React.Component {
     /*
      * Returns a list of selected UIDs
      */
-    return this.props.selected || [];
+    return this.props.selected_uids || [];
   }
 
   is_multi_valued() {
@@ -47,10 +47,10 @@ class ReferenceField extends React.Component {
     /*
      * Show/hide input field
      */
-    let selected = this.get_selected_uids();
+    let selected_uids = this.get_selected_uids();
     let multi_valued = this.is_multi_valued();
 
-    if (selected.length > 0 && !multi_valued) {
+    if (selected_uids.length > 0 && !multi_valued) {
       return false;
     }
     return true;
@@ -68,9 +68,9 @@ class ReferenceField extends React.Component {
      * Build selected items list
      */
     let items = [];
-    let selected = this.get_selected_uids();
+    let selected_uids = this.get_selected_uids();
 
-    for (let uid of selected) {
+    for (let uid of selected_uids) {
       items.push(
         <div uid={uid} className="selected-item">
           <span className="badge badge-secondary">
@@ -169,7 +169,7 @@ class ReferenceField extends React.Component {
         }
         <input type="hidden"
           name={this.props.name + "_uid"}
-          value={this.props.selected.join(",")}
+          value={this.props.selected_uids.join(",")}
           />
       </div>
     );
