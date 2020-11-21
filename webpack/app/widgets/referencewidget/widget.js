@@ -28,6 +28,7 @@ class ReferenceWidgetController extends React.Component {
     this.state = {
       id: id,
       name: name,
+      value: value,
       // disabled flag for the field
       disabled: false,
       // query state
@@ -35,6 +36,7 @@ class ReferenceWidgetController extends React.Component {
       search_index: search_index,
       base_query: this.parse_json(base_query),
       search_query: this.parse_json(search_query),
+      search_term: "",
       columns: this.parse_json(columns),
       display_field: this.display_field,
       // the selected UIDs of the field
@@ -110,8 +112,9 @@ class ReferenceWidgetController extends React.Component {
     let options = {
       catalog_name: this.state.catalog_name,
       base_query: this.state.base_query,
-      search_index: this.state.search_index,
       search_query: this.state.search_query,
+      search_index: this.state.search_index,
+      search_term: this.state.search_term,
       columns: this.state.columns
     }
     return options
@@ -146,18 +149,8 @@ class ReferenceWidgetController extends React.Component {
      */
     console.debug("ReferenceWidgetController::search:value:", value);
 
-    if (!value) {
-      value = "";
-    }
-
-    // update the search value in the state
-    if (value) {
-      let query = {};
-      query[this.state.search_index] = value;
-      let search_query = Object.assign(
-        this.state.search_query, query);
-      this.state.search_query = search_query;
-    }
+    // set the value on the state
+    this.state.search_term = value;
 
     // prepare the server request
     let self = this;
@@ -170,7 +163,6 @@ class ReferenceWidgetController extends React.Component {
       // keep track of all loaded records to render display values properly
       let by_uid = self.results_by_uid(data);
       let records = Object.assign(self.state.records, by_uid);
-
       self.setState({
         results: data,
         records: records
@@ -221,6 +213,7 @@ class ReferenceWidgetController extends React.Component {
           <ReferenceField
             className="form-control"
             name={this.state.name}
+            value={this.state.value}
             disabled={this.state.disabled}
             selected_uids={this.state.selected_uids}
             records={this.state.records}

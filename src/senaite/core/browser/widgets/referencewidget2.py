@@ -14,6 +14,11 @@ from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 from ZPublisher.HTTPRequest import record
 
+TEXT_INDEXES = {
+    "ZCTextIndex",
+    "TextIndexNG3",
+}
+
 
 @implementer(IPublishTraverse)
 class ReferenceWidgetView(BrowserView):
@@ -73,6 +78,21 @@ class ReferenceWidgetView(BrowserView):
 
         return func(*args)
 
+    def is_valid_index(self, catalog, index):
+        """Checks if the index exists
+        """
+        if index not in catalog.indexes():
+            return False
+        return True
+
+    def is_text_index(self, catalog, index):
+        """Checks if the index is a text index that supports wildcards
+        """
+        if not self.is_valid_index(catalog, index):
+            return False
+        index = catalog._catalog.getIndex(index)
+        return index.meta_type in TEXT_INDEXES
+
     def get_json(self):
         """Returns the request data
         """
@@ -93,15 +113,8 @@ class ReferenceWidgetView(BrowserView):
     def get_field_value(self, field):
         """Get the raw field value
         """
-        value = None
-        accessor = getattr(field, "getRaw", None)
-        if callable(accessor):
-            value = field.getRaw(self.context)
-        else:
-            value = field.get(self.context)
-        if not isinstance(value, (list, tuple)):
-            value = [value]
-        return filter(None, value)
+        value = field.get(self.context)
+        return value.get("value")
 
     def get_field_attributes(self, field):
         """Get field attributes
@@ -190,9 +203,16 @@ class ReferenceWidgetView(BrowserView):
         catalog_name = data.get("catalog_name", "portal_catalog")
         base_query = data.get("base_query", {})
         search_query = data.get("search_query", {})
+        search_index = data.get("search_index", "Title")
+        search_term = data.get("search_term", "")
         catalog = api.get_tool(catalog_name)
+        if self.is_text_index(catalog, search_index):
+            search_term = search_term and search_term + "*" or search_term
+        if self.is_valid_index(catalog, search_index):
+            search_query[search_index] = search_term
         query = base_query.copy()
         query.update(search_query)
+
         logger.info("ReferenceWidgetView::ajax_search:query=%r" % query)
         results = catalog.search(query, reverse=False)
         return map(self.to_column_data, results)

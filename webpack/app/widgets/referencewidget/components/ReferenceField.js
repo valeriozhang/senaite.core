@@ -163,6 +163,7 @@ class ReferenceField extends React.Component {
               ref={this.input_field_ref}
               id={this.props.id}
               name={this.props.name}
+              defaultValue={this.props.value}
               disabled={this.props.disabled}
               onChange={this.on_change}
               onBlur={this.on_blur}
