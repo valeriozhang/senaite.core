@@ -213,6 +213,7 @@ class ReferenceWidgetController extends React.Component {
         <div className="referencewidget">
           <ReferenceField
             className="form-control"
+            id={this.state.id}
             name={this.state.name}
             value={this.state.value}
             disabled={this.state.disabled}
