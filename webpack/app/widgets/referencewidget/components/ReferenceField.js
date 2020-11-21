@@ -85,6 +85,9 @@ class ReferenceField extends React.Component {
   }
 
   on_deselect(event) {
+    /*
+     * Callback when the delete icon was clicked on a selected item
+     */
     event.preventDefault();
     let target = event.currentTarget;
     let uid = target.getAttribute("uid");
@@ -94,6 +97,9 @@ class ReferenceField extends React.Component {
   }
 
   on_change(event) {
+    /*
+     * Callback when the search term changed
+     */
     event.preventDefault();
     let value = this.get_search_value();
     console.debug("ReferenceField::on_change:value: ", value);
@@ -103,6 +109,9 @@ class ReferenceField extends React.Component {
   }
 
   on_keypress(event) {
+    /*
+     * Avoid form submissione when clicking "Enter"
+     */
     if (event.which == 13) {
       // prevent form submission
       event.preventDefault();
@@ -110,6 +119,9 @@ class ReferenceField extends React.Component {
   }
 
   on_focus(event) {
+    /*
+     * Callback when the search field got focused
+     */
     console.debug("ReferenceField::on_focus");
     if (this.props.on_focus) {
       let value = this.get_search_value();
@@ -118,6 +130,9 @@ class ReferenceField extends React.Component {
   }
 
   on_blur(event) {
+    /*
+     * Callback when the search field lost focus
+     */
     console.debug("ReferenceField::on_blur");
     if (this.props.on_blur) {
       this.props.on_blur();
