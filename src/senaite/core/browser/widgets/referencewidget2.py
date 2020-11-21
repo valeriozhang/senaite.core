@@ -86,7 +86,17 @@ class ReferenceWidgetView(BrowserView):
             return value
         elif isinstance(value, record):
             value = dict(value)
+        elif api.is_object(value):
+            value = api.get_uid(value)
         return json.dumps(value)
+
+    def get_field_value(self, field):
+        """Get the raw field value
+        """
+        accessor = getattr(field, "getRaw", None)
+        if not callable(accessor):
+            return field.get(self.context)
+        return field.getRaw(self.context)
 
     def get_field_attributes(self, field):
         """Get field attributes
@@ -103,7 +113,8 @@ class ReferenceWidgetView(BrowserView):
         multi_valued = getattr(field, "multiValued", False) in ["1", True]
 
         field_name = "{}".format(field.__name__)
-        field_value = field.get(self.context)
+        field_value = self.get_field_value(field)
+
         field_id = "{}_{}".format(api.get_id(self.context), field_name)
         url = api.get_url(self.context)
         api_url = "{}/{}".format(url, self.__name__)
