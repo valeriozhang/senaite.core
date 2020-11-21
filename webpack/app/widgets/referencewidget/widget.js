@@ -23,6 +23,7 @@ class ReferenceWidgetController extends React.Component {
     let columns = el.dataset.columns;
     let display_field = el.dataset.display_field;
     let limit = el.dataset.limit || 10;
+    let disabled = el.dataset.disabled || false;
 
     // Internal state
     this.state = {
@@ -30,7 +31,7 @@ class ReferenceWidgetController extends React.Component {
       name: name,
       value: value,
       // disabled flag for the field
-      disabled: false,
+      disabled: disabled,
       // query state
       catalog_name: catalog_name,
       search_index: search_index,
