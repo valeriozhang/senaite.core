@@ -39,10 +39,10 @@ class ReferenceWidgetController extends React.Component {
       display_field: this.display_field,
       // the selected UIDs of the field
       selected_uids: [],
-      // records
-      records: {},
       // the search query results
       results: [],
+      // UID -> record data for display values
+      records: {},
       // loading state
       loading: false,
       // multi valued
@@ -58,12 +58,14 @@ class ReferenceWidgetController extends React.Component {
 
     // bind methods
     this.search = this.search.bind(this);
-    this.search_all = this.search_all.bind(this);
     this.clear_results = this.clear_results.bind(this);
     this.select = this.select.bind(this);
     this.deselect = this.deselect.bind(this);
     this.on_esc = this.on_esc.bind(this);
     this.on_click = this.on_click.bind(this);
+
+    // dev only
+    window.widget = this;
 
     return this
   }
@@ -76,6 +78,19 @@ class ReferenceWidgetController extends React.Component {
   componentWillUnmount() {
     document.removeEventListener("keydown", this.on_esc, false);
     document.removeEventListener("click", this.on_click, false);
+  }
+
+  results_by_uid(results) {
+    /*
+     * Group results by UID
+     */
+    let mapping = {};
+    results.map(function(item, index) {
+      let uid = item.uid || item.UID || index;
+      mapping[uid] = item;
+    });
+    console.info("RESULTS BY UID: ", mapping);
+    return mapping;
   }
 
   parse_json(value) {
@@ -132,16 +147,17 @@ class ReferenceWidgetController extends React.Component {
     console.debug("ReferenceWidgetController::search:value:", value);
 
     if (!value) {
-      this.search_all();
-      return;
+      value = "";
     }
 
     // update the search value in the state
-    let query = {};
-    query[this.state.search_index] = value + "*";
-    let search_query = Object.assign(
-      this.state.search_query, query);
-    this.state.search_query = search_query;
+    if (value) {
+      let query = {};
+      query[this.state.search_index] = value;
+      let search_query = Object.assign(
+        this.state.search_query, query);
+      this.state.search_query = search_query;
+    }
 
     // prepare the server request
     let self = this;
@@ -149,25 +165,16 @@ class ReferenceWidgetController extends React.Component {
     let options = this.getRequestOptions();
     let promise = this.api.search(options);
     promise.then(function(data) {
-      console.debug("GOT REFWIDGET FILTER RESULTS: ", data);
-      self.setState({results: data});
-      self.toggle_loading(false);
-    });
-  }
+      console.debug(">>> GOT REFWIDGET FILTER RESULTS: ", data);
 
-  search_all() {
-    /*
-     * Search all results
-     */
-    // prepare the server request
-    let self = this;
-    this.toggle_loading(true);
-    this.state.search_query = {};
-    let options = this.getRequestOptions();
-    let promise = this.api.search(options);
-    promise.then(function(data) {
-      console.debug("GOT REFWIDGET FILTER RESULTS: ", data);
-      self.setState({results: data})
+      // keep track of all loaded records to render display values properly
+      let by_uid = self.results_by_uid(data);
+      let records = Object.assign(self.state.records, by_uid);
+
+      self.setState({
+        results: data,
+        records: records
+      });
       self.toggle_loading(false);
     });
   }
@@ -216,6 +223,8 @@ class ReferenceWidgetController extends React.Component {
             name={this.state.name}
             disabled={this.state.disabled}
             selected_uids={this.state.selected_uids}
+            records={this.state.records}
+            display_field={this.state.display_field}
             multi_valued={this.state.multi_valued}
             on_search={this.search}
             on_focus={this.search}

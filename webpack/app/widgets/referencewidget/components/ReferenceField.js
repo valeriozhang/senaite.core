@@ -63,6 +63,15 @@ class ReferenceField extends React.Component {
     return this.props.records[uid] || {};
   }
 
+  get_display_value(uid) {
+    /*
+     * Returns the record by UID
+     */
+    let record = this.get_record_by_uid(uid);
+    let display_field = this.props.display_field || "Title";
+    return record[display_field] || uid;
+  }
+
   buildSelectedItems() {
     /*
      * Build selected items list
@@ -71,12 +80,13 @@ class ReferenceField extends React.Component {
     let selected_uids = this.get_selected_uids();
 
     for (let uid of selected_uids) {
+      let display_value = this.get_display_value(uid);
       items.push(
         <div uid={uid} className="selected-item">
-          <span className="badge badge-secondary">
+          <span className="p-1 bg-light border rounded-lg">
             <i uid={uid}
                onClick={this.on_deselect}
-               className="fas fa-trash"></i> {uid}
+               className="fas fa-trash"></i> {display_value}
           </span>
         </div>
       );

@@ -12,7 +12,7 @@
 
 <!-- Core JS bundle -->
 
-<script tal:attributes="src string:${view/site_url}//++plone++senaite.core.static/bundles/main-c2afccf.js"></script>
+<script tal:attributes="src string:${view/site_url}//++plone++senaite.core.static/bundles/main-ee1e019.js"></script>
 
 
 <!-- Core CSS bundle -->
