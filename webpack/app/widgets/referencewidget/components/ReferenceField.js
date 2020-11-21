@@ -73,7 +73,7 @@ class ReferenceField extends React.Component {
     for (let uid of selected) {
       items.push(
         <div uid={uid} className="selected-item">
-          <span className="badge badge-pill badge-primary">
+          <span className="badge badge-secondary">
             <i uid={uid}
                onClick={this.on_deselect}
                className="fas fa-trash"></i> {uid}

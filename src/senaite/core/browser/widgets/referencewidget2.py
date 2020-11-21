@@ -93,22 +93,32 @@ class ReferenceWidgetView(BrowserView):
     def get_field_value(self, field):
         """Get the raw field value
         """
+        value = None
         accessor = getattr(field, "getRaw", None)
-        if not callable(accessor):
-            return field.get(self.context)
-        return field.getRaw(self.context)
+        if callable(accessor):
+            value = field.getRaw(self.context)
+        else:
+            value = field.get(self.context)
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+        return filter(None, value)
 
     def get_field_attributes(self, field):
         """Get field attributes
+
+        # TODO: Provide adapter to extract bootstrap parameters from field!
         """
         widget = field.widget
 
         # BBB for compatibility with old reference widget
-        # TODO: Provide adapter to extract bootstrap parameters from field!
         catalog_name = getattr(widget, "catalog_name", "portal_catalog")
+        catalog = api.get_tool(catalog_name)
         base_query = getattr(widget, "base_query", {})
         search_query = getattr(widget, "search_query", {})
         columns = getattr(widget, "colModel", {})
+        display_field = getattr(widget, "ui_item", "Title")
+        search_index = getattr(widget, "search_index", "Title")
+        search_fields = getattr(widget, "search_fields", ())
         style = getattr(widget, "style", {"width": "550px"})
         multi_valued = getattr(field, "multiValued", False) in ["1", True]
 
@@ -119,16 +129,23 @@ class ReferenceWidgetView(BrowserView):
         url = api.get_url(self.context)
         api_url = "{}/{}".format(url, self.__name__)
 
+        if len(search_fields) > 0:
+            index = search_fields[0]
+            if index in catalog.indexes():
+                search_index = index
+
         return {
             "data-id": field_id,
             "data-name": field_name,
             "data-value": self.to_json(field_value),
             "data-multi_valued": self.to_json(multi_valued),
             "data-api_url": api_url,
+            "data-search_index": self.to_json(search_index),
             "data-catalog_name": catalog_name,
             "data-base_query": self.to_json(base_query),
             "data-search_query": self.to_json(search_query),
             "data-columns": self.to_json(columns),
+            "data-display_field": display_field,
             "data-style": self.to_json(style),
         }
 
@@ -166,7 +183,7 @@ class ReferenceWidgetView(BrowserView):
         return info
 
     def ajax_search(self):
-        """Search endpoint
+        """Search endpoint for the widget
         """
         data = self.get_json()
         # extract search query parameters

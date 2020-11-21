@@ -13,30 +13,32 @@ class ReferenceWidgetController extends React.Component {
     let el = props.root_el;
     let id = el.dataset.id;
     let name = el.dataset.name;
-    let value = el.dataset.value || "";
+    let value = el.dataset.value;
     let multi_valued = el.dataset.multi_valued;
-    let selected = value.split(",") || [];
     let api_url = el.dataset.api_url;
     let catalog_name = el.dataset.catalog_name;
+    let search_index = el.dataset.search_index;
     let base_query = el.dataset.base_query;
     let search_query = el.dataset.search_query;
     let columns = el.dataset.columns;
+    let display_field = el.dataset.display_field;
     let limit = el.dataset.limit || 10;
 
     // Internal state
     this.state = {
       id: id,
       name: name,
-      value: value,
       // disabled flag for the field
       disabled: false,
       // query state
       catalog_name: catalog_name,
+      search_index: search_index,
       base_query: this.parse_json(base_query),
       search_query: this.parse_json(search_query),
       columns: this.parse_json(columns),
+      display_field: this.display_field,
       // the selected UIDs of the field
-      selected: selected,
+      selected: [],
       // records
       records: {},
       // the search query results
@@ -66,12 +68,12 @@ class ReferenceWidgetController extends React.Component {
     return this
   }
 
-  componentDidMount(){
+  componentDidMount() {
     document.addEventListener("keydown", this.on_esc, false);
     document.addEventListener("click", this.on_click, false)
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     document.removeEventListener("keydown", this.on_esc, false);
     document.removeEventListener("click", this.on_click, false);
   }
@@ -93,6 +95,7 @@ class ReferenceWidgetController extends React.Component {
     let options = {
       catalog_name: this.state.catalog_name,
       base_query: this.state.base_query,
+      search_index: this.state.search_index,
       search_query: this.state.search_query,
       columns: this.state.columns
     }
@@ -130,12 +133,15 @@ class ReferenceWidgetController extends React.Component {
 
     if (!value) {
       this.search_all();
-      return null;
+      return;
     }
 
-    // remember the search value in the state
-    let query = {Title: value + "*"}
-    this.setState({search_query: query})
+    // update the search value in the state
+    let query = {};
+    query[this.state.search_index] = value + "*";
+    let search_query = Object.assign(
+      this.state.search_query, query);
+    this.state.search_query = search_query;
 
     // prepare the server request
     let self = this;
@@ -144,7 +150,7 @@ class ReferenceWidgetController extends React.Component {
     let promise = this.api.search(options);
     promise.then(function(data) {
       console.debug("GOT REFWIDGET FILTER RESULTS: ", data);
-      self.setState({results: data})
+      self.setState({results: data});
       self.toggle_loading(false);
     });
   }
