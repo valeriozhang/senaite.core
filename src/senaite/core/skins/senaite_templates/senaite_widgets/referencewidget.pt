@@ -118,6 +118,18 @@
                                      multiValued python:1 if context.Schema()[fieldName].multiValued else 0;
                                      combogrid_options python:widget.get_combogrid_options(context, fieldName)" />
 
+
+              <!-- ReactJS based reference widget -->
+              <div tal:condition="python:True"
+                   tal:define="view python:context.restrictedTraverse('@@referencewidget_view');"
+                   tal:attributes="python:view.get_field_attributes(field);
+                                  data-id string:${fieldName}_value;
+                                  data-name string:${fieldName}_value;
+                                  data-value string:${value};"
+
+                   class="senaite-reference-widget">
+              </div>
+
                 <input type="hidden"
                        name=""
                        value=""

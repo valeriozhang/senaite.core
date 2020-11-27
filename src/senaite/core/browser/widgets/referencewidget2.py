@@ -113,8 +113,7 @@ class ReferenceWidgetView(BrowserView):
     def get_field_value(self, field):
         """Get the raw field value
         """
-        value = field.get(self.context)
-        return value.get("value")
+        return field.getRaw(self.context)
 
     def get_field_attributes(self, field):
         """Get field attributes
