@@ -12,7 +12,7 @@
             <span i18n:name="senaitelims" tal:omit-tag="">
               <a href="https://www.senaite.com"
                  target="_blank"
-                 i18n:translate="label_senaite">SENAITE LIMS</a>
+                 i18n:translate="label_senaite">Valer LIS</a>
             </span>
           </span>
         </div>
