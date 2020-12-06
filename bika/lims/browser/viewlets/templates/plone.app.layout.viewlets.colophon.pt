@@ -8,7 +8,7 @@
         <div class="text-center text-muted">
           <ul class="list-inline">
             <li i18n:translate="label_powered_by">
-              SENAITE is powered by:
+              Valer LIS is powered by:
             </li>
             <li>
               <a href="http://plone.org"
