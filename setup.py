@@ -25,7 +25,7 @@ version = '1.3.5'
 setup(
     name='valer.core',
     version=version,
-    description="VAler Core",
+    description="Valer LIMS Core",
     long_description=open("README.rst").read() + "\n" +
     open("RELEASE_NOTES.rst").read() + "\n" +
     open("CHANGES.rst").read() + "\n",
@@ -38,7 +38,7 @@ setup(
         "Framework :: Zope2",
         "Programming Language :: Python",
     ],
-    keywords=['senaite', 'lims', 'opensource'],
+    keywords=['senaite', 'lims', 'opensource', 'Valer'],
     author="Valer Group LLC",
     author_email="valerio.zhang@valer.us",
     url="https://github.com/valeriozhang/senaite.core",
@@ -83,7 +83,7 @@ setup(
         # tinycss2 >= 1.0.0 does not support Python 2.x anymore
         'tinycss2<1.0.0',
         # Add this line *after* senaite.impress 1.2.0 was realeased!
-        'senaite.impress>=1.2.0',
+        'valer.impress>=1.2.0',
         # Python 2/3 compatibility library: https://six.readthedocs.io/
         'six',
         # Needed for `IPortalCatalogQueueProcessor`, which will be included in
