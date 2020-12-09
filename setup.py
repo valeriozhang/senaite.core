@@ -23,9 +23,9 @@ from setuptools import setup, find_packages
 version = '1.3.5'
 
 setup(
-    name='senaite.core',
+    name='valer.core',
     version=version,
-    description="SENAITE Core",
+    description="VAler Core",
     long_description=open("README.rst").read() + "\n" +
     open("RELEASE_NOTES.rst").read() + "\n" +
     open("CHANGES.rst").read() + "\n",
@@ -39,9 +39,10 @@ setup(
         "Programming Language :: Python",
     ],
     keywords=['senaite', 'lims', 'opensource'],
-    author="RIDING BYTES & NARALABS",
-    author_email="senaite@senaite.com",
-    url='https://github.com/senaite/senaite.core',
+    author="Valer Group LLC",
+    author_email="valerio.zhang@valer.us",
+    url="https://github.com/valeriozhang/senaite.core",
+    
     license='GPLv2',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['bika'],
@@ -74,9 +75,9 @@ setup(
         'CairoSVG==1.0.20',
         'cairocffi<1.0.0',
         'zopyx.txng3.ext==3.4.0',
-        "senaite.core.supermodel>=1.2.0",
-        "senaite.core.listing>=1.1.0",
-        "senaite.core.spotlight",
+        "valer.core.supermodel>=1.2.0",
+        "valer.core.listing>=1.1.0",
+        "valer.core.spotlight",
         # Python 2.x is not supported by WeasyPrint v43
         'WeasyPrint==0.42.3',
         # tinycss2 >= 1.0.0 does not support Python 2.x anymore
