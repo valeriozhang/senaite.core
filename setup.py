@@ -20,7 +20,7 @@
 
 from setuptools import setup, find_packages
 
-version = '1.3.5rc7'
+version = '1.3.5rc8'
 
 setup(
     name='valer.core',
@@ -75,9 +75,9 @@ setup(
         'CairoSVG==1.0.20',
         'cairocffi<1.0.0',
         'zopyx.txng3.ext==3.4.0',
-        "valer.core.supermodel==1.2.4rc7",
-        "valer.core.listing==1.5.3rc7",
-        "valer.core.spotlight==1.0.3rc7",
+        "valer.core.supermodel==1.2.4rc8",
+        "valer.core.listing==1.5.3rc8",
+        "valer.core.spotlight==1.0.3rc8",
         # Python 2.x is not supported by WeasyPrint v43
         'WeasyPrint==0.42.3',
         # tinycss2 >= 1.0.0 does not support Python 2.x anymore
