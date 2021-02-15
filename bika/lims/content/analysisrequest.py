@@ -102,6 +102,8 @@ from bika.lims.utils import user_fullname
 from bika.lims.workflow import getTransitionDate
 from bika.lims.workflow import getTransitionUsers
 from DateTime import DateTime
+from datetime import datetime
+
 from Products.Archetypes.atapi import BaseFolder
 from Products.Archetypes.atapi import BooleanField
 from Products.Archetypes.atapi import BooleanWidget
@@ -447,6 +449,7 @@ schema = BikaSchema.copy() + Schema((
     DateTimeField(
         'DateSampled',
         mode="rw",
+        default=datetime.now().strftime("%Y-%m-%d"),        
         read_permission=View,
         write_permission=FieldEditDateSampled,
         widget=DateTimeWidget(
@@ -1025,15 +1028,21 @@ schema = BikaSchema.copy() + Schema((
         'DateReceived',
         mode="rw",
         read_permission=View,
-        write_permission=FieldEditDateReceived,
+        write_permission=FieldEditEnvironmentalConditions,
         widget=DateTimeWidget(
             label=_("Date Sample Received"),
             show_time=True,
             datepicker_nofuture=1,
             description=_("The date when the sample was received"),
+            visible={
+                'add': 'edit',
+                'header_table': 'prominent',
+            },
+
             render_own_label=True,
         ),
     ),
+    
     ComputedField(
         'DatePublished',
         mode="r",

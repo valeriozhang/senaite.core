@@ -450,6 +450,35 @@
         </div>
     </li>
 
+ <li>
+        <a href="#" id="samplespublished_selector"
+                i18n:translate="">Samples Published Report</a>
+        <br/>
+            <span i18n:translate="">
+                Report tables of Sampes published during given date range.
+            </span>
+
+        <div id="samplespublished" style="display:none" class="criteria">
+            <form action="createreport" method="post"
+                  name="productivity_samplespublished">
+                <input type="hidden" name="report_id"
+                       value="productivity_samplespublished"/>
+                <fieldset>
+                    <tal:x content="structure python:view.selection_macros.select_daterange_created(
+                                                              field_id='getDateCreated',
+                                                              field_title='Date Created')"/>
+                    <tal:x content="structure context/@@selection_macros/select_output_format"/>
+                </fieldset>
+                <input tabindex=""
+                       class="searchButton allowMultiSubmit"
+                       type="submit"
+                       name="submit"
+                       value="Generate report"
+                        i18n:attributes="value"/>
+            </form>
+        </div>
+    </li>
+    
     <li>
         <a href="#" id="dataentrydaybook_selector"
                 i18n:translate="">Data entry day book</a>
