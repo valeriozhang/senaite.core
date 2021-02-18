@@ -20,7 +20,7 @@
 
 from setuptools import setup, find_packages
 
-version = '1.3.5rc8'
+version = '1.3.5rc9'
 
 setup(
     name='valer.core',
@@ -75,15 +75,15 @@ setup(
         'CairoSVG==1.0.20',
         'cairocffi<1.0.0',
         'zopyx.txng3.ext==3.4.0',
-        "valer.core.supermodel==1.2.4rc8",
-        "valer.core.listing==1.5.3rc8",
-        "valer.core.spotlight==1.0.3rc8",
+        "valer.core.supermodel==1.2.4rc9",
+        "valer.core.listing==1.5.3rc9",
+        "valer.core.spotlight==1.0.3rc9",
         # Python 2.x is not supported by WeasyPrint v43
         'WeasyPrint==0.42.3',
         # tinycss2 >= 1.0.0 does not support Python 2.x anymore
         'tinycss2<1.0.0',
         # Add this line *after* senaite.impress 1.2.0 was realeased!
-        'valer.impress==1.2.4rc7',
+        'valer.impress==1.2.4rc9',
         # Python 2/3 compatibility library: https://six.readthedocs.io/
         'six',
         # Needed for `IPortalCatalogQueueProcessor`, which will be included in
