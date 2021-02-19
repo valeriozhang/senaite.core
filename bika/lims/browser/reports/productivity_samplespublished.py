@@ -102,13 +102,29 @@ class Report(BrowserView):
             old_ar_id = None
             old_ar_date = None
             old_result = None
+
             ars_old = catalog(getPatientUID=brain.getPatientUID)
             if ars_old and len(ars_old) > 0:
-                old = ars_old[0].getObject()
-                for an in old.getAnalyses():
-                    an = an.getObject()
-                    if an.getResult():
-                        old_result = an.getFormattedResult()
+                for old in ars_old:
+                    old = old.getObject()
+
+                    # if its the same main AR, continue
+                    if old.getId() == ar.getId():
+                        continue
+
+                    old_ar_date = getTransitionDate(old, 'publish')
+                    if not old_ar_date:
+                        continue
+
+                    if old_ar_date > datepublished:
+                        old_ar_date = None
+                        continue
+
+                    old_ar_id = old.getId()
+                    for an in old.getAnalyses():
+                        an = an.getObject()
+                        if an.getResult():
+                            old_result = an.getFormattedResult()
 
             #getting test result
             for an in  ar.getAnalyses():
@@ -120,11 +136,11 @@ class Report(BrowserView):
                 "DatePublished": self.ulocalized_time(datepublished),
                 "PatientID": patient.getClientPatientID(),
                 "PatientName": patient.getFullname(),
-                "BirthDate": patient.getBirthDate(),
+                "BirthDate": self.ulocalized_time(patient.getBirthDate()),
                 "Doctor": brain.getDoctorTitle,
                 "Result": result,
                 "PreAnalysisRequestID": old_ar_id,
-                "PreDatePublished": old_ar_date,
+                "PreDatePublished": self.ulocalized_time(old_ar_date),
                 "PreResult": old_result,
             }
 

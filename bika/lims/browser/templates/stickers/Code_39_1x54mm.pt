@@ -3,6 +3,14 @@
                      item python:view.current_item;
                      sample_id item/getId;
                      client_sample_id item/getClientSampleID;
+                     patient item/getContactURL;
+                     cref item/getClientReference;
+                     pid item/getClientPatientID;
+                     xxxage item/ContactFullName;
+                     pname python:item['Patient'].getFullname();
+                     age python:str(item['Patient'].getBirthDate())[0:10] if item['Patient'].getBirthDate() else '';
+                     date_rec python:str(item['DateReceived'])[0:10] if item['DateReceived'] else '';
+
                      hazardous item/getHazardous|nothing;">
 
   <!-- Sample ID -->
@@ -25,10 +33,14 @@
     <table cellpadding="0" cellspacing="0" border="0">
       <tr>
         <td class="client-sample-id">
-          <span i18n:translate="">CSID</span>
-          <span tal:content="python:client_sample_id or default">&mdash;</span>
+                <span tal:content="sample_id"></span><br/>
+                <span tal:content="date_rec"> </span><br/>
+          <span tal:content="pname"></span>
+          <span tal:content="age"></span>
+          <!-- <span tal:content="python:client_sample_id or default">&mdash;</span> -->
         </td>
       </tr>
     </table>
   </div>
 </tal:sticker>
+
