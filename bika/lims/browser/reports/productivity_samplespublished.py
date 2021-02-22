@@ -85,6 +85,10 @@ class Report(BrowserView):
             datecreated = ar.created()
             datereceived = ar.getDateReceived()
             datepublished = getTransitionDate(ar, 'publish')
+
+            if not datepublished:
+	        continue            
+
             receptionlag = 0
             publicationlag = 0
             anlcount = len(ar.getAnalyses())

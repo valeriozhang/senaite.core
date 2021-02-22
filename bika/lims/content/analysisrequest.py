@@ -647,7 +647,7 @@ schema = BikaSchema.copy() + Schema((
 
     ReferenceField(
         'Specification',
-        required=0,
+        required=1,
         primary_bound=True,  # field changes propagate to partitions
         allowed_types='AnalysisSpec',
         relationship='AnalysisRequestAnalysisSpec',
