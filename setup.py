@@ -20,7 +20,7 @@
 
 from setuptools import setup, find_packages
 
-version = '1.3.5rc11'
+version = '1.3.5rc12'
 
 setup(
     name='valer.core',

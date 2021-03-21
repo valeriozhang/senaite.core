@@ -216,7 +216,7 @@ class Person(BaseFolder):
     def getPossibleAddresses(self):
         return ["PhysicalAddress", "PostalAddress"]
 
-    def getFullname(self):
+    def getFullname_old(self):
         """Person's Fullname
         """
 
@@ -246,6 +246,37 @@ class Person(BaseFolder):
                 fullname = '%s %s' % (self.getFirstname(), self.getSurname())
         return fullname.strip()
 
+    #Title = getFullname
+
+    @security.public
+    def getFullname(self):
+        """Person's Fullname
+        """
+
+        sal = self.getSalutation()
+        jt = self.getJobTitle()
+        fn = self.getFirstname()
+        mi = self.getMiddleinitial()
+        md = self.getMiddlename()
+        sn = self.getSurname()
+        fullname = ""
+
+        if sal:
+            fullname = sal + " "
+
+        if fn:
+            fullname = fullname + fn + " "
+
+        if md:
+            fullname = fullname + md + " "
+
+        if sn:
+            fullname = fullname + sn + " "
+
+        if jt:
+            fullname = fullname.strip() + ", " + jt
+
+        return fullname.strip()
     Title = getFullname
 
     @security.protected(CMFCorePermissions.ManagePortal)
