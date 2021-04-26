@@ -449,7 +449,8 @@ schema = BikaSchema.copy() + Schema((
     DateTimeField(
         'DateSampled',
         mode="rw",
-        default=datetime.now().strftime("%Y-%m-%d"),        
+        #default=datetime.now().strftime("%Y-%m-%d"),        
+        default=DateTime(),
         read_permission=View,
         write_permission=FieldEditDateSampled,
         widget=DateTimeWidget(
